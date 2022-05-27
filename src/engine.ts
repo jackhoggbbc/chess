@@ -16,7 +16,7 @@ const piece_values:  { [piece: string]: number }  = {
 };
 
 // white is always the maximizing player
-export function minimax(position: Chess, depth: number, maximizingPlayer: boolean) {
+export function minimax(position: Chess, depth: number, alpha: number, beta: number, maximizingPlayer: boolean): number {
     if (depth == 0 || position.gameOver()) {
         return evaluate(position);
     }
@@ -24,21 +24,31 @@ export function minimax(position: Chess, depth: number, maximizingPlayer: boolea
     const legalMoves = position.moves();
 
     if (maximizingPlayer) {
-        let value = Number.NEGATIVE_INFINITY;
+        let maxEval = Number.NEGATIVE_INFINITY;
         for (let i = 0; i < legalMoves.length; i++) {
             position.move(legalMoves[i]);
-            value = Math.max(value, minimax(position, depth - 1, false));
+            const evaluation = minimax(position, depth - 1, alpha, beta, false);
+            maxEval = Math.max(maxEval, evaluation);
+            alpha = Math.max(alpha, evaluation);
+            if (beta <= alpha) {
+                break;
+            }
             position.undo();
         }
-        return value;
+        return maxEval;
     } else {
-        let value = Number.POSITIVE_INFINITY;
+        let minEval = Number.POSITIVE_INFINITY;
         for (let i = 0; i < legalMoves.length; i++) {
             position.move(legalMoves[i]);
-            value = Math.min(value, minimax(position, depth - 1, true));
+            const evaluation = minimax(position, depth - 1, alpha, beta, true);
+            minEval = Math.min(minEval, evaluation);
+            beta = Math.min(beta, evaluation);
+            if (beta <= alpha) {
+                break;
+            }
             position.undo();
         }
-        return value;
+        return minEval;
     }
 }
 

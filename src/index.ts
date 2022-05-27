@@ -10,7 +10,7 @@ export function bestMove(FEN: string, depth: number): string {
 	for (let i = 0; i < moves.length; i++) {
 		const move = moves[i];
 		chess.move(move);
-		let value = minimax(chess, depth, true);
+		let value = minimax(chess, depth, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY, true);
 		if (value > bestValue) {
 			bestMove = move;
 			bestValue = value;

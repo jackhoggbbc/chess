@@ -18,3 +18,7 @@ describe('Test evaluate', () => {
         expect(evaluate(chess)).toBe(0);
     });
 });
+
+describe('Test minimax', () => {
+    it('')
+})
